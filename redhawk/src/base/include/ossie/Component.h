@@ -20,6 +20,7 @@
 
 #ifndef COMPONENT_H
 #define	COMPONENT_H
+#include <boost/smart_ptr.hpp>
 #include "Resource_impl.h"
 #include "ossie/debug.h"
 #include "ossie/Events.h"

@@ -25,6 +25,7 @@
 
 #include <ossie/BufferManager.h>
 
+#include <boost/smart_ptr.hpp>
 #include <boost/thread.hpp>
 
 #include "Block.h"
