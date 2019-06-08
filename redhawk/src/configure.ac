@@ -61,6 +61,29 @@ AC_CORBA_ORB
 
 AC_LANG_PUSH([C++])
 
+
+dnl Allow language standard to be specified for newer compilers
+AC_MSG_CHECKING([for compiler-specific language standard])
+AC_ARG_ENABLE(cxxstd, [
+AS_HELP_STRING([--enable-cxxstd@<:@=std@:>@], [Specify the language standard.  Supported standards are compiler-specific. For g++: c++98, c++11, c++14, c++17 and others. @<:@default is compiler default@:>@])
+AS_HELP_STRING([--disable-cxx], [Use compiler default])],
+                [],
+                dnl Default behavior is implicit yes
+                [ enable_cxx="yes" ])
+AS_IF([test "x$enable_cxxstd" = "xno" -o "x$enable_cxxstd" = "xnone"], [
+  cxxstd=""
+],[
+  cxxstd=$enable_cxxstd
+])
+
+AS_IF([test "x$cxxstd" == "x"], [
+  AC_MSG_RESULT([default])
+], [
+  AC_MSG_RESULT([$cxxstd])
+  AC_SUBST(CXXFLAGS,"$CXXFLAGS -std=$cxxstd")
+])
+
+
 AX_BOOST_BASE([1.35])
 AX_BOOST_SYSTEM
 AX_BOOST_FILESYSTEM
@@ -217,6 +240,7 @@ AC_HEADER_SYS_WAIT
 AC_CHECK_HEADERS(time.h)
 AC_HEADER_DIRENT
 AX_CXX_GCC_ABI_DEMANGLE
+
 
 if test "x$cross_compiling" == "xyes"; then
 # Cross our fingers and hope
