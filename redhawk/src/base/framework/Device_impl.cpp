@@ -367,7 +367,7 @@ bool Device_impl::allocateCapacityLegacy (const CF::Properties& capacities)
         try {
             // Get all properties currently in device
             query (currentCapacities);
-        } catch (CF::UnknownProperties) {
+        } catch (CF::UnknownProperties const &) {
         }
 
         SCOPED_LOCK(propertySetAccess);

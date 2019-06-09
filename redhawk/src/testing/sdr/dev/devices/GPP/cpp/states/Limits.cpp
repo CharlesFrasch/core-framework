@@ -91,7 +91,7 @@ void SysLimits::update_state()
           tmp.files = boost::lexical_cast<int64_t>( values[0] );
           tmp.files_limit = boost::lexical_cast<int64_t>( values[2] );
         }
-        catch( boost::bad_lexical_cast ){
+        catch( boost::bad_lexical_cast const & ){
         }
       }
     }
@@ -113,7 +113,7 @@ void SysLimits::update_state()
         try {
           tmp.threads_limit = boost::lexical_cast<int64_t>( values[0] );
         }
-        catch( boost::bad_lexical_cast ){
+        catch( boost::bad_lexical_cast const & ){
         }
       }
     }
@@ -131,7 +131,7 @@ void SysLimits::update_state()
         try {
           tmp.threads = boost::lexical_cast<int>( values[0] );
         }
-        catch( boost::bad_lexical_cast ){
+        catch( boost::bad_lexical_cast const & ){
         }
       }
     }
@@ -190,7 +190,7 @@ void ProcessLimits::update_state()
           try {
             tmp.threads = boost::lexical_cast<int>( values[1] );
           }
-          catch( boost::bad_lexical_cast ){
+          catch( boost::bad_lexical_cast const & ){
           }
         }
       }

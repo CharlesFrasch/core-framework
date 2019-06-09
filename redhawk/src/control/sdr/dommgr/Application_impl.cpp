@@ -456,10 +456,10 @@ throw (CF::PropertySet::PartialConfiguration, CF::PropertySet::InvalidConfigurat
             comp != batch.end(); ++comp) {
         try {
             comp->second.first->configure(comp->second.second);
-        } catch (CF::PropertySet::InvalidConfiguration e) {
+        } catch (CF::PropertySet::InvalidConfiguration const & e) {
             // Add invalid properties to return list
             invalidProperties.extend(e.invalidProperties);
-        } catch (CF::PropertySet::PartialConfiguration e) {
+        } catch (CF::PropertySet::PartialConfiguration const & e) {
             // Add invalid properties to return list
             invalidProperties.extend(e.invalidProperties);
         }
@@ -544,7 +544,7 @@ throw (CF::UnknownProperties, CORBA::SystemException)
                     configProperties[count].id = CORBA::string_dup(extId.c_str());
                     configProperties[count].value = comp->second.second[i].value;
                 }
-            } catch (CF::UnknownProperties e) {
+            } catch (CF::UnknownProperties const & e) {
                 invalidProperties.extend(e.invalidProperties);
             }
         }
@@ -554,7 +554,7 @@ throw (CF::UnknownProperties, CORBA::SystemException)
         try {
             CF::Resource_var ac_resource = _assemblyController->getResourcePtr();
             ac_resource->query(tempProp);
-        } catch (CF::UnknownProperties e) {
+        } catch (CF::UnknownProperties const & e) {
             for (unsigned int i = 0; i < e.invalidProperties.length(); ++i) {
                 RH_ERROR(_baseLog, "Invalid assembly controller property name: " << e.invalidProperties[i].id);
             }
@@ -641,7 +641,7 @@ throw (CF::UnknownProperties, CORBA::SystemException)
                 comp != batch.end(); ++comp) {
             try {
                 comp->second.first->query(comp->second.second);
-            } catch (CF::UnknownProperties e) {
+            } catch (CF::UnknownProperties const & e) {
                 invalidProperties.extend(e.invalidProperties);
             }
         }

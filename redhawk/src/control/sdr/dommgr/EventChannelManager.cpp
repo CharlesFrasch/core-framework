@@ -133,7 +133,7 @@ void EventChannelManager::terminate ( const bool destroyChannels ) {
       }
       iter->second.channel = ossie::events::EventChannel::_nil();
     }
-    catch(CORBA::OBJECT_NOT_EXIST){
+    catch(CORBA::OBJECT_NOT_EXIST const &){
         // only report issue when event service was available
         if ( !CORBA::is_nil(_event_channel_factory) ) {
              RH_WARN(_eventChannelMgrLog, "Remove Channel FAILED, CHANNEL:" << iter->first << " REASON: Object does not exists");
@@ -690,7 +690,7 @@ ossie::events::EventChannelReg_ptr EventChannelManager::_registerResource( const
       try {
         ossie::events::EventChannel_var ch  __attribute__((unused)) = _create(channel_name);         // adds to list of channel registrations automatically
       }
-      catch( CF::EventChannelManager::ChannelAlreadyExists ){
+      catch( CF::EventChannelManager::ChannelAlreadyExists const & ){
         RH_ERROR(_eventChannelMgrLog, "REGISTRATION ERROR, REG-ID:" << regid << " CHANNEL:" << channel_name  << " Channel exists in EventService" );
         throw (CF::EventChannelManager::OperationFailed());    
       }

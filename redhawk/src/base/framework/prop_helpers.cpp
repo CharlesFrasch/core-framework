@@ -212,6 +212,53 @@ CORBA::Any ossie::convertComplexStringToAny(std::string value) {
     return result;
 }
 
+// Yuck! c++98 requires an enclosing namespace for template
+// specializations. After c++14 they can be done with a fully
+// qualified name
+namespace ossie {
+
+template <>
+CORBA::Any ossie::convertComplexStringToAny< bool, CF::complexBoolean >(std::string value) {
+    
+    char sign = '+'; // sign represents + or -
+    char j = 0; // j represents the letter j in the string
+    bool A, B;     // A is the real value, B is the complex value
+    A = false;
+    B = false;
+
+    CORBA::Any result;
+
+    // Assuming a string of the format A+jB, parse out A and B.
+    std::stringstream stream(value);
+    stream >> A >> sign >> j >> B;
+
+    if (value.size() > 1) {
+        if (value[0] == 'j') {
+            std::stringstream stream(value);
+            stream >> j >> B;
+        } else if ((value[0] == '-') and (value[1] == 'j')) {
+            std::stringstream stream(value);
+            stream >> sign >> j >> B;
+        }
+    }
+
+    // For complexBoolean we (for now anyway) ignore the sign bit.
+    // Negative Corba booleans provoke undefined behavior.
+
+    if (value.find('j') == std::string::npos)
+        B = false;
+
+    // Create a complex representation and convert it to a CORBA::any.
+    CF::complexBoolean cfComplex;
+    cfComplex.real = A;
+    cfComplex.imag = B;
+    result <<= cfComplex;
+
+    return result;
+}
+
+}
+
 /*
  * Performs __MATH__ operations.
  *
@@ -740,6 +787,24 @@ std::string ossie::convertComplexAnyToString(const CORBA::Any& value){
     }
 
     return result.str();
+}
+
+// c++98-ism again
+namespace ossie {
+
+template <>
+std::string ossie::convertComplexAnyToString< CF::complexBoolean >(const CORBA::Any& value){
+
+    std::ostringstream result;
+
+    CF::complexBoolean * tmpCFComplexType;
+    value >>= tmpCFComplexType;
+
+    result << tmpCFComplexType->real << "+j" << tmpCFComplexType->imag;
+
+    return result.str();
+}
+
 }
 
 std::string ossie::complexAnyToString(const CORBA::Any& value)
